@@ -31,6 +31,25 @@ int main(){
 	y[0] = 0.0;
 	vx[0] = v0mag*cos(alpha0/180*M_PI);
 	vy[0] = v0mag*sin(alpha0/180*M_PI);
+	
+
+
+
+
+	x[0] = 0.0;
+	y[0] = 0.0;
+	vx[0] = v0mag*cos(alpha0/180*M_PI);
+	vy[0] = v0mag*sin(alpha0/180*M_PI);
+
+
+	float k1x, k1y, k1vx, k1vy;
+	float k2x, k2y, k2vx, k2vy;
+	float k3x, k3y, k3vx, k3vy;
+	float k4x, k4y, k4vx, k4vy;
+
+
+	ofstream projectile("projectile.csv");
+
 
 
 
