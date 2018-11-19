@@ -37,6 +37,7 @@ int main(int argc, char const *argv[])
 
 	float Tpresent2[nx][nx];                // Condicion periodica para mi frontera
 	float Tfuture2[nx][nx];			//Areglo Tfuturo2 de ese tamaño
+	
 	int rock_int[nx][nx];			//Arreglo para guardar T para roca
 	//Despues de crear todos estas variables se supone que ya tengo donde guardar todos los datos que necesito!!
 	
@@ -60,8 +61,9 @@ int main(int argc, char const *argv[])
 				Tfuture2[i][j] = Trod;
 
 				rock_int[i][j] = 0;			//En este caso mi roca deberia ser 0!
-			}else
-			{ // Ahora lo hago para mi roca
+			}
+			else
+			{ 						// Ahora lo hago para mi roca
 				Tpresent[i][j] = 10.0;			
 				Tfuture[i][j] = 10.0;
 
@@ -95,15 +97,19 @@ int main(int argc, char const *argv[])
 	// Y ahora tiene que encontrarme la solucion--------------------------------------------------------------------
 	//Acuerdese que siempre se mueve en tiempo y posicion!!!
 
-	float nu=conductivity/(Cp*rho_si);
-	float C=0.1;
-	float dt=C*dx*dx/nu;
+
+
+	//Inicializar los valores que faltan:
+	float nu=conductivity/(Cp*rho_si);	//Definicion de nu, encontrado en internet	
+	float C=0.1;				//Constante
+	float dt=C*dx*dx/nu;			//Cada cuanto tiempo se va a mover
 
 	
-	int nt=5000;
-	float tf=dt*nt;
+	int nt=5000;				//Cuantos tiempos;
+	float tf=dt*nt;				//Tiempo final, es todo lo que se demora
 
 	//Quiero crear un archivo diferente para cada caso! Escogi tipo de archivo csv
+	
 	ofstream rock("rock.csv");				//Caso1:Mandeme los datos a un archivo .csv para despues plotearlos
 	ofstream rock1("rock1.csv");				//Caso2:Mandeme los datos a un archivo .csv para despues plotearlos
 	ofstream rock2("rock2.csv");				//Caso3:Mandeme los datos a un archivo .csv para despues plotearlos
@@ -114,9 +120,9 @@ int main(int argc, char const *argv[])
 	//Aranco mi ciclo
 	for ( int k = 0; k < nt; ++k)
 	{// Arranco mi ciclo para el tiempo!
-		for (int i = 0; i < nx; ++i)
+		for (int i = 0; i < nx; ++i)					//Muevase en X
 		{
-			for (int j = 0; j < nx; ++j)
+			for (int j = 0; j < nx; ++j)				//Muevase en Y
 			{
 				if (rock_int[i][j]==1)                                    //Si mi dato de roca efectivamente es uno, por la inializacion de arriba:
 				{                                                         //Apliquele  la roca este cambio:
@@ -159,6 +165,8 @@ int main(int argc, char const *argv[])
 		
 
 		//Aqui me di cuenta que las esquinas siempre van a ser un problema, entonces toca hacerlo especifico para estas!!
+		
+
 		//Para mis esquinas:
 
 		Tfuture2[0][0] = C*(Tpresent2[nx-1][0] + Tpresent2[1][0] + Tpresent2[0][nx-1] + Tpresent2[0][1] - 4*Tpresent2[0][0]) + Tpresent2[0][0];
@@ -184,12 +192,13 @@ int main(int argc, char const *argv[])
 		}
 
 		// Mandeme ya mis datos a mis archivos!!!
-		for (int i = 0; i < nx; ++i)
+		//Toca crear un ciclo para que me recorra todos los puntos y me los mande a mis archivos.		
+		for (int i = 0; i < nx; ++i)			//Muevase en X
 		{
-			for (int j = 0; j < nx; ++j)
+			for (int j = 0; j < nx; ++j)		//Muevase en Y
 			{
 				rock << Tpresent[i][j] << ",";
-				rock1 << Tpresent1[i][j] << ",";
+				rock1 << Tpresent1[i][j] << ",";	//Mandeme cada dato para cada condicion en su respectivo archivos. La coma es para separarlos
 				rock2 << Tpresent2[i][j] << ",";
 			}
 		}
@@ -197,7 +206,7 @@ int main(int argc, char const *argv[])
 		rock1 << "\n";
 		rock2 << "\n";
 
-
+		
 	}
 
 
@@ -206,7 +215,8 @@ int main(int argc, char const *argv[])
 	tiempo << "Tiempo final [s] \n";			//Mandeme este mensaje para que se vea bonito
 	tiempo << tf << endl;					//Imprima el tiempo final del proceso de difusion en el archivo de tiempo en la carpeta
 	cout<<"   "<<endl;					//Imprima vacio para que no se vea pegado
-	cout <<"Al correr el programa y observar los archivos produciods, se puede ver claramente donde hay cambio de T"<<endl;	
+	cout <<"Al correr el programa y observar los archivos producidos, se puede ver claramente donde hay cambio de T"<<endl;	
+	cout<<"   "<<endl;					//Imprima vacio para que no se vea pegado
 	cout << "Programa de Pde Finalizado\n\n\n";		//Muestreme que Pde se cabo porque si no, con el mkae uno no sabe que es que
 	return 0;
 }
