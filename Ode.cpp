@@ -256,8 +256,10 @@ void varios_angulos()
 
 
 	cout << "\n\nAngulo de mayor distancia en x es: " << alpha[angulo_maxDist]/M_PI*180 << "\n\n";    //Por ultimo, deme ese angulo que esta en el arreglo de angulos en la posicion encontrada
-	cout << "Programa Ode Finalizado\n";
+	cout << "Programa Ode Finalizado y resultados hechos\n";
 	cout<<"         "<<endl;
 	//cout << vx[0] << "\n" << vy[0] << "\n";
 
 }
+
+//Final completo, Funciona!!
