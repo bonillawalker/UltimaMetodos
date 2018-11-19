@@ -1,0 +1,78 @@
+\documentclass{article}[11]
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, activeacute]{babel}
+\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{xspace}
+\def\andname{y}
+\usepackage{indentfirst}
+\graphicspath{ {Imagenes/} }
+
+
+\title{Tarea #4 Metodos Computacionales}
+\author{Felipe Bonilla W\\Universidad de Los Andes}
+
+\date{19 de Noviembre del 2018}
+\begin{document}
+\maketitle
+\begin{abstract}
+Mediante los programas de Python, C++ y Make se espera resolver una ecuacion diferencial ordinaria y una ecuacion diferencial parcial. La idea es que estas dos ecuaciones sean resueltas y arrojen datos que permitan obtener una serie de diagramas que seran analizados para emtender lo sucedido. Ademas, por medio de un archivo de Make, se espera poder combinar todos los archivos y lograr que este informe sea completado por las graficas, que varian segun los datos.
+\end{abstract}
+
+    
+\section{ODE}
+Segun la guia, en esta parte de la tarea se debe solucianar la ecuacion de movimiento de un proyectil que es lanzado con unas condiciones iniciales conocidas.
+\\
+\\
+Para un angulo de 45 grados la trayectoria que se obtiene es la siguiente:
+
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+
+
+Como se puede ver en la figra, la particula llega a la distancia en x que mi programa de C++ calcula. Esta distancia es mas o menos 4,3.
+\\
+\\
+Ahora se observo que pasa si se varia el angulo inicial con el que arranca la particula. Los resultados para 7 diferentes grados fueron graficados en este diagrama:
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+
+Como se ve en la figura, todos los lanzamientos son caracteristicos de lanzamiento de un proyectil. Claramente se ve que, al lanzar el proyectil con un angulo de 20 grados el proyectil alcanza la mayor distancia en x.
+
+
+
+\section{PDE }
+La siguiente parte de la tarea, consiste en simular la ecuacion de difusion en 2 dimensiones. La idea es que se tiene una varilla metalica a cierta temperatura, dentro de una roca. Se quiere analizar la evolucion de la temperatura que sufre esta roca.
+\\
+\\
+Es importante aclarar, que para este ejercicio fueron propuestas tres diferentes condiciones para la frontera. La primera de ellas es que la frontera es fija, es deir que siempre va a estar a la misma temperatura. Para esta condicion se encontraron las siguientes situaciones
+
+
+
+
+
+
+    
+
+    
+
+
+
+\end{document}
