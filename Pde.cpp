@@ -218,5 +218,5 @@ int main(int argc, char const *argv[])
 	cout <<"Al correr el programa y observar los archivos producidos, se puede ver claramente donde hay cambio de T"<<endl;	
 	cout<<"   "<<endl;					//Imprima vacio para que no se vea pegado
 	cout << "Programa de Pde Finalizado\n\n\n";		//Muestreme que Pde se cabo porque si no, con el mkae uno no sabe que es que
-	return 0;
+	return 0;                                               //
 }
