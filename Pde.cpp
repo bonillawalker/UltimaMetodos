@@ -91,22 +91,6 @@ int main(int argc, char const *argv[])
 		}
 	}
 
-// Falsa ditribucion de temperatura
-//	for ( int i = 6; i < 10; ++i)
-//	{
-//		for (int j = 6; j < 10; ++j)
-//		{
-//			Tpresent[i][j] = 100.0;
-//			Tfuture[i][j] = 100.0;
-//
-//			Tpresent1[i][j] = 100.0;
-//			Tfuture1[i][j] = 100.0;
-//
-//			Tpresent2[i][j] = 100.0;
-//			Tfuture2[i][j] = 100.0;
-//		}
-//	}
-
 
 	// Y ahora tiene que encontrarme la solucion--------------------------------------------------------------------
 	//Acuerdese que siempre se mueve en tiempo y posicion!!!
@@ -126,15 +110,19 @@ int main(int argc, char const *argv[])
 
 
 
-
+	//Aqui arranco a plantear su solucion!
+	//Aranco mi ciclo
 	for ( int k = 0; k < nt; ++k)
-	{// loop in time
+	{// Arranco mi ciclo para el tiempo!
 		for (int i = 0; i < nx; ++i)
 		{
 			for (int j = 0; j < nx; ++j)
 			{
-				if (rock_int[i][j]==1)
-				{// the node is in the rock
+				if (rock_int[i][j]==1)                                    //Si mi dato de roca efectivamente es uno, por la inializacion de arriba:
+				{                                                         //Apliquele  la roca este cambio:
+
+					//Esto se obtiene al derivar la funcion dada en la guia, como lo hicimos en la clase y sale en el libro
+					
 					Tfuture[i][j] = C*(Tpresent[i-1][j] + Tpresent[i+1][j] + Tpresent[i][j-1] + Tpresent[i][j+1] - 4*Tpresent[i][j]) + Tpresent[i][j];
 
 					Tfuture1[i][j] = C*(Tpresent1[i-1][j] + Tpresent1[i+1][j] + Tpresent1[i][j-1] + Tpresent1[i][j+1] - 4*Tpresent1[i][j]) + Tpresent1[i][j];
@@ -147,7 +135,7 @@ int main(int argc, char const *argv[])
 
 
 
-		// Open boundary conditions
+		// Para las fronteras abiertas:
 		for (int i = 0; i < nx; ++i)
 		{
 			Tfuture1[0][i] = Tfuture1[1][i];
@@ -158,7 +146,7 @@ int main(int argc, char const *argv[])
 		}
 
 
-		// periodic boundary conditions
+		// Para las fronteras periodicas:
 		for (int i = 1; i < nx-1; ++i)
 		{
 			Tfuture2[0][i] = C*(Tpresent2[nx-1][i] + Tpresent2[1][i] + Tpresent2[0][i-1] + Tpresent2[0][i+1] - 4*Tpresent2[0][i]) + Tpresent2[0][i];
@@ -168,8 +156,11 @@ int main(int argc, char const *argv[])
 			Tfuture2[i][0] = C*(Tpresent2[i][nx-1] + Tpresent2[i][1] + Tpresent2[i-1][0] + Tpresent2[i+1][0] - 4*Tpresent2[i][0]) + Tpresent2[i][0];
 			Tfuture2[i][nx-1] = C*(Tpresent2[i][nx-2] + Tpresent2[i][0] + Tpresent2[i-1][nx-1] + Tpresent2[i+1][nx-1] - 4*Tpresent2[i][nx-1]) + Tpresent2[i][nx-1];
 		}		
+		
 
-		// esquinas
+		//Aqui me di cuenta que las esquinas siempre van a ser un problema, entonces toca hacerlo especifico para estas!!
+		//Para mis esquinas:
+
 		Tfuture2[0][0] = C*(Tpresent2[nx-1][0] + Tpresent2[1][0] + Tpresent2[0][nx-1] + Tpresent2[0][1] - 4*Tpresent2[0][0]) + Tpresent2[0][0];
 		Tfuture2[0][nx-1] = C*(Tpresent2[nx-1][nx-1] + Tpresent2[1][nx-1] + Tpresent2[0][nx-2] + Tpresent2[0][0] - 4*Tpresent2[0][nx-1]) + Tpresent2[0][nx-1];
 
@@ -178,22 +169,21 @@ int main(int argc, char const *argv[])
 
 
 
-		// reasigne values
+		//Actualizeme los nuevos valores para poder volver a arrancar en el siguiente tiempo
 		for (int i = 0; i < nx; ++i)
 		{
 			for ( int j = 0; j < nx; ++j)
 			{
-				//if (rock_int[i][j]==1)
-				//{
-					Tpresent[i][j] = Tfuture[i][j];
-					Tpresent1[i][j] = Tfuture1[i][j];
-					Tpresent2[i][j] = Tfuture2[i][j];
-				//}
+			
+				Tpresent[i][j] = Tfuture[i][j];
+				Tpresent1[i][j] = Tfuture1[i][j];
+				Tpresent2[i][j] = Tfuture2[i][j];
+			
 
 			}
 		}
 
-		// export data
+		// Mandeme ya mis datos a mis archivos!!!
 		for (int i = 0; i < nx; ++i)
 		{
 			for (int j = 0; j < nx; ++j)
@@ -203,7 +193,7 @@ int main(int argc, char const *argv[])
 				rock2 << Tpresent2[i][j] << ",";
 			}
 		}
-		rock << "\n";
+		rock << "\n";  
 		rock1 << "\n";
 		rock2 << "\n";
 
@@ -216,7 +206,7 @@ int main(int argc, char const *argv[])
 	tiempo << "Tiempo final [s] \n";			//Mandeme este mensaje para que se vea bonito
 	tiempo << tf << endl;					//Imprima el tiempo final del proceso de difusion en el archivo de tiempo en la carpeta
 	cout<<"   "<<endl;					//Imprima vacio para que no se vea pegado
-
+	cout <<"Al correr el programa y observar los archivos produciods, se puede ver claramente donde hay cambio de T"<<endl;	
 	cout << "Programa de Pde Finalizado\n\n\n";		//Muestreme que Pde se cabo porque si no, con el mkae uno no sabe que es que
 	return 0;
 }
