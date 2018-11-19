@@ -6,55 +6,60 @@
 using namespace std;
 
 
-void varios_angulos();
+
+//Decidi hacer Runge-Kutta porque asi sea muy largo esta muy bien explicado en el repositorio y es mucho mas facil guiarme asi
+
+
+void varios_angulos();                           //Declaro el tipo de funcion que voy a hacer mas adelante para la segunda parte
 
 int main(int argc, char const *argv[])
 {
+	//Declaro todas las constantes para mi problema --------------------------------------
+	float g=-10.0;                       //Gravedad	
+	float c=0.2;                         //Coeficiente de friccion
+	float m=0.2;                         //Masa de la particula
 
-	float g=-10.0; 
-	float c=0.2; 
-	float m=0.2; 
-
-	float v0mag = 300.0; 
-	float alpha0= 45.0; 
-
-	
-	float dt = 0.001;
-	int nt = 2000; 
+	float v0mag = 300.0; 	             //Velocidad inicial	
+	float alpha0= 45.0; 		     //Angulo inicial con el que arranco
 
 
-	
+	//Para manejar el tiempo se necesita fijar:
+	float dt = 0.001;                     //Cada cuanto va a mirar
+	int nt = 2000; 			      //Cuantas veces va a mirar
+
+
+	//Creo los arreglos donde voy a guardar todas mis variables de interes(x,y,vx,vy) -----------------
 	float x[nt];
-	float y[nt];
+	float y[nt];					//Todos tienen que tener el tamaño necesario para guardar en todos los tiempos
 	float vx[nt];
 	float vy[nt];
 
 
-
+	//Ahora le pongo todos los datos con los que inicia la particula ---------------------------------------------
 	x[0] = 0.0;
-	y[0] = 0.0;
-	vx[0] = v0mag*cos(alpha0/180*M_PI);
-	vy[0] = v0mag*sin(alpha0/180*M_PI);
+	y[0] = 0.0;					//Todos los datos vienen dados en la guia
+	vx[0] = v0mag*cos(alpha0/180*M_PI);		//Para las dos velocidades me di cuenta que c++ hace el coseno en radianes, entonces toca pasar los angulos a Radianes
+	vy[0] = v0mag*sin(alpha0/180*M_PI);		//Encontre que M_PI es Pi en c++
 
-
+	//Ahora si aplico el metodo de RungeKutta4 -----------------------------------------------
 	
-
+	//Inicializar todas las variables k para guardar mis datos
 	float k1x, k1y, k1vx, k1vy;
 	float k2x, k2y, k2vx, k2vy;
 	float k3x, k3y, k3vx, k3vy;
 	float k4x, k4y, k4vx, k4vy;
 
-
+	//Creo un archivo projectile para poder mandar todos mis datos de posicion y velocidad en funcion del tiempo
 	ofstream projectile("projectile.csv");
 
-	int lastIt=0;
+	int NumeroIt=0;				//Inicio la variable del numero de iteraciones totales en 0
 
 	for (int i = 0; i < nt-1; ++i)
 	{
 
-		projectile << i*dt << "," << x[i] << "," << y[i] << "," << vx[i] << "," << vy[i] << "\n";
+		projectile << i*dt << "," << x[i] << "," << y[i] << "," << vx[i] << "," << vy[i] << "\n";  //Mandeme a mi archivo el tiempo en el que va, la posicion x,y y la velocidad x,y
 
-		
+		//Apliqueme RK4
 		k1x = vx[i];
 		k1y = vy[i];
 		k1vx = -c/m*pow( pow(vx[i],2) + pow(vy[i],2) , 0.5)*vx[i];
@@ -86,7 +91,7 @@ int main(int argc, char const *argv[])
 			
 			cout << "\nDezplazamiento en eje x = " << x[i+1] << "\n";
 			lastIt = i;
-			cout << "Total iteraciones= " << lastIt << "\n";
+			cout << "Total iteraciones= " << NumeroIt << "\n";
 			break;
 		}
 
@@ -95,11 +100,11 @@ int main(int argc, char const *argv[])
 	}
 
 
-	if (lastIt==0)
+	if (NumeroIt==0)
 	{
 		cout << "\nDezplazamiento en eje x = " << x[nt-1] << "\n";
-		lastIt = nt;
-		cout << "Total iteraciones = " << lastIt << "\n";
+		NumeroIt = nt;
+		cout << "Total iteraciones = " << NumeroIt << "\n";
 	}
 
 	cout << "Programa Finalizado\n";
@@ -172,7 +177,7 @@ void varios_angulos()
 	int angulo_maxDist=2;
 
 	
-	int lastIt=0;
+	int NumeroIt=0;
 
 	for (int i = 0; i < nt-1; ++i)
 	{
