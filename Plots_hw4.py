@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D                                 #Sacado de internet
 import sys
 
 
@@ -64,8 +64,8 @@ if (sys.argv[1]=='PDE'):						     #Para el archivo de Ode (Lo encuentro mirando
 	intermedio2 = int(0.6*pasos);
 
 
-	rock0 = np.reshape(rock_data[0,:], (n,n))
-	rock_intermedio1 = np.reshape(rock_data[intermedio1,:], (n,n))
+	rock0 = np.reshape(rock_data[0,:], (n,n))				#Me le da una nueva forma a mi matriz sin variarme mis datos para que sea mas facil plotear
+	rock_intermedio1 = np.reshape(rock_data[intermedio1,:], (n,n)) 
 	rock_intermedio2 = np.reshape(rock_data[intermedio2,:], (n,n))
 	rockf = np.reshape(rock_data[-1,:], (n,n))
 	rockm0 = np.mean(rock_data, 1)
@@ -121,7 +121,7 @@ if (sys.argv[1]=='PDE'):						     #Para el archivo de Ode (Lo encuentro mirando
 	intermedio2 = int(0.6*pasos);
 
 
-	rock0 = np.reshape(rock_data[0,:], (n,n))
+	rock0 = np.reshape(rock_data[0,:], (n,n))			#Me le da una nueva forma a mi matriz sin variarme mis datos para que sea mas facil plotear
 	rock_intermedio1 = np.reshape(rock_data[intermedio1,:], (n,n))
 	rock_intermedio2 = np.reshape(rock_data[intermedio2,:], (n,n))
 	rockf = np.reshape(rock_data[-1,:], (n,n))
@@ -177,8 +177,8 @@ if (sys.argv[1]=='PDE'):						     #Para el archivo de Ode (Lo encuentro mirando
 	intermedio1 = int(0.3*pasos);
 	intermedio2 = int(0.6*pasos);
 
-
-	rock0 = np.reshape(rock_data[0,:], (n,n))
+			
+	rock0 = np.reshape(rock_data[0,:], (n,n))			#Me le da una nueva forma a mi matriz sin variarme mis datos para que sea mas facil plotear
 	rock_intermedio1 = np.reshape(rock_data[intermedio1,:], (n,n))
 	rock_intermedio2 = np.reshape(rock_data[intermedio2,:], (n,n))
 	rockf = np.reshape(rock_data[-1,:], (n,n))
