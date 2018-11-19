@@ -228,6 +228,6 @@ if (sys.argv[1]=='PDE'):						     #Para el archivo de Ode (Lo encuentro mirando
 	plt.plot(t, rockm1)	
 	plt.plot(t, rockm2)
 	plt.legend(['F','A', 'P'])							#Pongame la leyenda para fija, periodica y abierta
-	plt.ylabel('T media')								#Pongame los nombres de los ejes
-	plt.xlabel('t [s]')
+	plt.ylabel('Temp Media')							#Pongame el nombre del eje Temp media
+	plt.xlabel('t [s]')                                                             #Pongame el nombre del eje tiempo en segundos
 	plt.savefig('rockm.png')							#Guardeme la figura con este nombre y en ese formato para poder ponerlo en el Latex
