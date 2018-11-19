@@ -9,124 +9,214 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
-	cout << "\n\n\nIniciando programa PDE\n";
+	cout << "\n\n\nIniciando programa PDE:\n";    //Mandeme un mensajito para ver bien donde arranca mi programa
 
+	//Creo las variables de mi roca
+	float conductivity=1.62;                     // m^2/s
+	float Cp=820;                                // J/(kg*K)
+	float rho=2.71;                              // g/cm^3 
+	float rho_si=rho/1000*1000000;               // Toca pasarlo a kg/m^3 porque si no todo me sale mal
+
+
+	//Creo las variables para mi varilla
+	float Trod = 100;                            // Temperatura de la varilla [°c]
+	float Drod = 0.1;                            // Diametro de la varilla [m]
+
+
+	// Inicio los otros datos -------------------------------------------------------
+	float L=0.5;                                 // Extension de mis datos
+	int nx=64;                                   // Numero de puntos
+	float dx=L/(nx-1);                           // Cada cuanto aparece un punto, como voy avanzando
+
+	//Creo mis arreglos para ir guardando todas las temperaturas (Pasado, Presente, Futuro)
+	float Tpresent[nx][nx];			//Arreglo Tpresente de ese tamaño
+	float Tfuture[nx][nx];			//Arreglo Tfuturo de ese tamaño
+
+	float Tpresent1[nx][nx];                //Condicion de frontera para mi primer punto de arranque
+	float Tfuture1[nx][nx];			////Arreglo Tfuturo1 de ese tamaño
+
+	float Tpresent2[nx][nx];                // Condicion periodica para mi frontera
+	float Tfuture2[nx][nx];			//Areglo Tfuturo2 de ese tamaño
+	int rock_int[nx][nx];			//Arreglo para guardar T para roca
+	//Despues de crear todos estas variables se supone que ya tengo donde guardar todos los datos que necesito!!
 	
-	float conductivity=1.62; 
-	float Cp=820;
-	float rho=2.71; 
-	float rho_si=rho/1000*1000000; 
-
-
 	
-	float Trod = 100; 
-	float Drod = 0.1; 
 
+	//Creo un ciclo para poder darle los valores iniciales a mis arreglos previamente creados!!
 
-
-	float L=0.5; 
-	int nx=64; 
-	float dx=L/(nx-1); 
-
-	
-	float Tpresent[nx][nx];
-	float Tfuture[nx][nx];
-	int rock_int[nx][nx];
-
-	int i, j;
-
-	for (i = 0; i < nx; ++i)
+	for (int i = 0; i < nx; ++i)		//Para moverme en X
 	{
-		for (j = 0; j < nx; ++j)
+		for (int j = 0; j < nx; ++j)    //Para moverme en Y
 		{
-			if (pow((i-nx/2)*dx,2) + pow((j-nx/2)*dx,2) < pow(Drod/2,2))
-			{ 
+			if (pow((i-nx/2)*dx,2) + pow((j-nx/2)*dx,2) < pow(Drod/2,2)) //Pow es una funcion que recibe una base y un exponente y devuelve la base elevada a la exponente(en este caso2)!	
+			{ // Arranco con los datos para la varilla
 				Tpresent[i][j] = Trod;
 				Tfuture[i][j] = Trod;
-				rock_int[i][j] = 0;
+				
+				Tpresent1[i][j] = Trod;			//Todo va a estar a la misma temperatura excepto mi roca, y va a ser la temperatura inicial de mi varilla!!!
+				Tfuture1[i][j] = Trod;
+				
+				Tpresent2[i][j] = Trod;
+				Tfuture2[i][j] = Trod;
+
+				rock_int[i][j] = 0;			//En este caso mi roca deberia ser 0!
 			}else
-			{ /
-				Tpresent[i][j] = 0.0;
-				Tfuture[i][j] = 0.0;
-				rock_int[i][j] = 1;
+			{ // Ahora lo hago para mi roca
+				Tpresent[i][j] = 10.0;			
+				Tfuture[i][j] = 10.0;
+
+				Tpresent1[i][j] = 10.0;
+				Tfuture1[i][j] = 10.0;			//Todo va a estar a 10 grados ya que es la temperatura de mi calcita!!!!
+
+				Tpresent2[i][j] = 10.0;
+				Tfuture2[i][j] = 10.0;
+
+				rock_int[i][j] = 1;			//En este caso mi roca deberia ser 1!
 			}
 		}
 	}
 
 
-	//Condicion frontera
-	for (i = 0; i < nx; ++i)
+	// Ahora si o si toca arreglar los puntos de las fronteras -----------------------------------------------------
+	
+	for (int i = 0; i < nx; ++i)				 //Recorrame todo mi arreglo en X
 	{
-		for (j = 0; j < nx; ++j){
-			if (i==0 || j==0 || i==nx-1 || j==nx-1)
-			{ 
-				Tpresent[i][j] = 10;
-				Tfuture[i][j] = 10;
-				rock_int[i][j] = 0;
+		for (int j = 0; j < nx; ++j){ 			 //Recorrame todo mi arreglo en Y
+			if (i==0 || j==0 || i==nx-1 || j==nx-1)  //Para mis primeros y ultimos puntos:
+			{					 // T frontera = 10 
+				Tpresent[i][j] = 10;		 // T =10
+				Tfuture[i][j] = 10;		 // T =10
+				rock_int[i][j] = 0;              // Roca si tiene que ser = 0
 			}
 		}
 	}
 
+// Falsa ditribucion de temperatura
+//	for ( int i = 6; i < 10; ++i)
+//	{
+//		for (int j = 6; j < 10; ++j)
+//		{
+//			Tpresent[i][j] = 100.0;
+//			Tfuture[i][j] = 100.0;
+//
+//			Tpresent1[i][j] = 100.0;
+//			Tfuture1[i][j] = 100.0;
+//
+//			Tpresent2[i][j] = 100.0;
+//			Tfuture2[i][j] = 100.0;
+//		}
+//	}
 
+
+	// Y ahora tiene que encontrarme la solucion--------------------------------------------------------------------
+	//Acuerdese que siempre se mueve en tiempo y posicion!!!
+
+	float nu=conductivity/(Cp*rho_si);
+	float C=0.1;
+	float dt=C*dx*dx/nu;
 
 	
-	float nu=conductivity/(Cp*rho);
-	float C=0.1;
-	float dt=C*dx/nu;
-
-	int k;
-	int nt=500;
+	int nt=5000;
 	float tf=dt*nt;
 
-	
-	ofstream rock("rock.csv");
+	//Quiero crear un archivo diferente para cada caso! Escogi tipo de archivo csv
+	ofstream rock("rock.csv");				//Caso1:Mandeme los datos a un archivo .csv para despues plotearlos
+	ofstream rock1("rock1.csv");				//Caso2:Mandeme los datos a un archivo .csv para despues plotearlos
+	ofstream rock2("rock2.csv");				//Caso3:Mandeme los datos a un archivo .csv para despues plotearlos
 
-	for (k = 0; k < nt; ++k)
-	{
-		for (i = 0; i < nx; ++i)
+
+
+
+	for ( int k = 0; k < nt; ++k)
+	{// loop in time
+		for (int i = 0; i < nx; ++i)
 		{
-			for (j = 0; j < nx; ++j)
+			for (int j = 0; j < nx; ++j)
 			{
 				if (rock_int[i][j]==1)
-				{
+				{// the node is in the rock
 					Tfuture[i][j] = C*(Tpresent[i-1][j] + Tpresent[i+1][j] + Tpresent[i][j-1] + Tpresent[i][j+1] - 4*Tpresent[i][j]) + Tpresent[i][j];
+
+					Tfuture1[i][j] = C*(Tpresent1[i-1][j] + Tpresent1[i+1][j] + Tpresent1[i][j-1] + Tpresent1[i][j+1] - 4*Tpresent1[i][j]) + Tpresent1[i][j];
+
+					Tfuture2[i][j] = C*(Tpresent2[i-1][j] + Tpresent2[i+1][j] + Tpresent2[i][j-1] + Tpresent2[i][j+1] - 4*Tpresent2[i][j]) + Tpresent2[i][j];
 				}
 			}
 
 		}
 
 
-		
-		for (i = 0; i < nx; ++i)
+
+		// Open boundary conditions
+		for (int i = 0; i < nx; ++i)
 		{
-			for (j = 0; j < nx; ++j)
+			Tfuture1[0][i] = Tfuture1[1][i];
+			Tfuture1[nx-1][i] = Tfuture1[nx-2][i];
+
+			Tfuture1[i][0] = Tfuture1[i][1];
+			Tfuture1[i][nx-1] = Tfuture1[i][nx-2];
+		}
+
+
+		// periodic boundary conditions
+		for (int i = 1; i < nx-1; ++i)
+		{
+			Tfuture2[0][i] = C*(Tpresent2[nx-1][i] + Tpresent2[1][i] + Tpresent2[0][i-1] + Tpresent2[0][i+1] - 4*Tpresent2[0][i]) + Tpresent2[0][i];
+			Tfuture2[nx-1][i] = C*(Tpresent2[nx-2][i] + Tpresent2[0][i] + Tpresent2[nx-1][i-1] + Tpresent2[nx-1][i+1] - 4*Tpresent2[nx-1][i]) + Tpresent2[nx-1][i];
+
+
+			Tfuture2[i][0] = C*(Tpresent2[i][nx-1] + Tpresent2[i][1] + Tpresent2[i-1][0] + Tpresent2[i+1][0] - 4*Tpresent2[i][0]) + Tpresent2[i][0];
+			Tfuture2[i][nx-1] = C*(Tpresent2[i][nx-2] + Tpresent2[i][0] + Tpresent2[i-1][nx-1] + Tpresent2[i+1][nx-1] - 4*Tpresent2[i][nx-1]) + Tpresent2[i][nx-1];
+		}		
+
+		// esquinas
+		Tfuture2[0][0] = C*(Tpresent2[nx-1][0] + Tpresent2[1][0] + Tpresent2[0][nx-1] + Tpresent2[0][1] - 4*Tpresent2[0][0]) + Tpresent2[0][0];
+		Tfuture2[0][nx-1] = C*(Tpresent2[nx-1][nx-1] + Tpresent2[1][nx-1] + Tpresent2[0][nx-2] + Tpresent2[0][0] - 4*Tpresent2[0][nx-1]) + Tpresent2[0][nx-1];
+
+		Tfuture2[nx-1][0] = C*(Tpresent2[nx-1][nx-1] + Tpresent2[nx-1][1] + Tpresent2[nx-2][0] + Tpresent2[0][0] - 4*Tpresent2[nx-1][0]) + Tpresent2[nx-1][0];
+		Tfuture2[nx-1][nx-1] = C*(Tpresent2[nx-1][nx-2] + Tpresent2[nx-1][0] + Tpresent2[nx-2][nx-1] + Tpresent2[0][nx-1] - 4*Tpresent2[nx-1][nx-1]) + Tpresent2[nx-1][nx-1];
+
+
+
+		// reasigne values
+		for (int i = 0; i < nx; ++i)
+		{
+			for ( int j = 0; j < nx; ++j)
 			{
-				if (rock_int[i][j]==1)
-				{
+				//if (rock_int[i][j]==1)
+				//{
 					Tpresent[i][j] = Tfuture[i][j];
-				}
+					Tpresent1[i][j] = Tfuture1[i][j];
+					Tpresent2[i][j] = Tfuture2[i][j];
+				//}
 
 			}
 		}
 
-		
-		for (i = 0; i < nx; ++i)
+		// export data
+		for (int i = 0; i < nx; ++i)
 		{
-			for (j = 0; j < nx; ++j)
+			for (int j = 0; j < nx; ++j)
 			{
 				rock << Tpresent[i][j] << ",";
+				rock1 << Tpresent1[i][j] << ",";
+				rock2 << Tpresent2[i][j] << ",";
 			}
 		}
 		rock << "\n";
+		rock1 << "\n";
+		rock2 << "\n";
 
 
 	}
 
 
 	
+	ofstream tiempo("tiempo.csv");
+	tiempo << "Tiempo final [s] \n";			//Mandeme este mensaje para que se vea bonito
+	tiempo << tf << endl;					//Imprima el tiempo final del proceso de difusion en el archivo de tiempo en la carpeta
+	cout<<"   "<<endl;					//Imprima vacio para que no se vea pegado
 
-
-
-	cout << "Programa Finalizado\n\n\n";
+	cout << "Programa de Pde Finalizado\n\n\n";		//Muestreme que Pde se cabo porque si no, con el mkae uno no sabe que es que
 	return 0;
 }
